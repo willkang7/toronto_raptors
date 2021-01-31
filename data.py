@@ -1,25 +1,12 @@
 import csv
-
-from plotly.graph_objs import Bar, Layout
-from plotly import offline
+import json
 
 total_points = {
-	'kawhi': [],
-	'kyle': [],
-	'pascal': [],
-	'danny': [],
-	'marc': [],
-	'fred': [],
-	'serge': [],
-	'norman': [],
-	'jodie': [],
-	'patrick': [],
-	'jeremy': [],
-	'malcolm': [],
-	'eric': [],
-	'chris': [],
-	'og': [],
-	'team': [],
+	'kawhi leonard': [],
+	'kyle lowry': [],
+	'pascal siakam': [],
+	'danny green': [],
+	'marc gasol': [],
 	}
 
 filenames = [
@@ -32,14 +19,17 @@ for filename in filenames:
 	with open('data/' + filename) as f:
 		reader = csv.reader(f)
 		header_row = next(reader)
-
-		# Get each player's points from this file.
+		
 		for row in reader:
 			try:
 				points = int(row[19])
 			except ValueError:
 				points = 'DNP'
-			player = row[0].split()[0].lower()
-			total_points[player].append(points)
+			
+			player = row[0].split('\\')[0].lower()
+			if player in total_points.keys():
+				total_points[player].append(points)
 
-print(total_points)
+filename = 'points.json'
+with open(filename, 'w') as f:
+	json.dump(total_points, f, indent=4)
