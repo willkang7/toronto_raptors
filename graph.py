@@ -2,74 +2,65 @@ import json
 import plotly.graph_objects as go
 
 # Get data.
-filename = 'data/points.json'
+filename = 'data.json'
 with open(filename) as f:
-	total_points = json.load(f)
-filename = 'data/assists.json'
-with open(filename) as f:
-	total_assists = json.load(f)
-filename = 'data/rebounds.json'
-with open(filename) as f:
-	total_rebounds = json.load(f)
+	data = json.load(f)
 
-# Create graph.
+# Plot graph of points.
 fig = go.Figure()
-
-for player, points in total_points.items():
+for player in data:
 	fig.add_trace(
 		go.Scatter(
-			y=points,
+			y=data[player]['points'],
 			mode='lines+markers',
 			name=player.title(),
-		),
+		)
 	)
 
-# Add buttons for graphs of points, assists, and rebounds.
+# Add buttons to view points, assists, and rebounds.
 fig.update_layout(
 	updatemenus=[
 		dict(
-			type="buttons",
-			direction="right",
+			type='buttons',
+			direction='right',
 			x=0.7,
 			y=1.2,
 			showactive=True,
-			buttons=list(
-				[
-					dict(
-						label="Points",
-						method="update",
-						args=[{"y":[
-							total_points['kawhi leonard'],
-							total_points['kyle lowry'],
-							total_points['pascal siakam'],
-							total_points['danny green'],
-							total_points['marc gasol'],
-						]}],
-					),
-					dict(
-						label="Assists",
-						method="update",
-						args=[{"y":[
-							total_assists['kawhi leonard'],
-							total_assists['kyle lowry'],
-							total_assists['pascal siakam'],
-							total_assists['danny green'],
-							total_assists['marc gasol'],
-						]}],
-					),
-					dict(
-						label="Rebounds",
-						method="update",
-						args=[{"y":[
-							total_rebounds['kawhi leonard'],
-							total_rebounds['kyle lowry'],
-							total_rebounds['pascal siakam'],
-							total_rebounds['danny green'],
-							total_rebounds['marc gasol'],
-						]}],
-					),
-				]
-			),
+			buttons=list([
+				dict(
+					label="Points",
+					method="update",
+					args=[{"y":[
+						data['kawhi leonard']['points'],
+						data['kyle lowry']['points'],
+						data['pascal siakam']['points'],
+						data['danny green']['points'],
+						data['marc gasol']['points'],
+					]}],
+				),
+				dict(
+					label="Assists",
+					method="update",
+					args=[{"y":[
+						data['kawhi leonard']['assists'],
+						data['kyle lowry']['assists'],
+						data['pascal siakam']['assists'],
+						data['danny green']['assists'],
+						data['marc gasol']['assists'],
+					]}],
+				),
+				dict(
+					label="Rebounds",
+					method="update",
+					args=[{"y":[
+						data['kawhi leonard']['rebounds'],
+						data['kyle lowry']['rebounds'],
+						data['pascal siakam']['rebounds'],
+						data['danny green']['rebounds'],
+						data['marc gasol']['rebounds'],
+					]}],
+				),
+			]),
 		)
 	]
 )
@@ -78,7 +69,7 @@ fig.update_layout(
 fig.update_layout(
 	title='Toronto Raptors Playoffs Stats',
 	hovermode="x unified",
-	xaxis_title='Game',
+	xaxis_title='Game Number',
 	yaxis_title='Total',
 )
 
